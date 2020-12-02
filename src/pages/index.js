@@ -1,5 +1,15 @@
 import React from "react"
+// https://github.com/bvaughn/react-error-boundary
+import { ErrorBoundary } from 'react-error-boundary'
 
+function ErrorFallback({error}) {
+  return (
+    <div role="alert">
+      <p>Something went wrong (caught at page-level):</p>
+      <pre>{error.message}</pre>
+    </div>
+  )
+}
 class CustomErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -73,8 +83,26 @@ function AppBreaker({ text }) {
 
 export default function Home() {
   return (
-    <CustomErrorBoundary>
-      <AppBreaker text="hello world" />
-    </CustomErrorBoundary>
+    // APPROACH 1 – error boundary in gatsby-browser.js.
+    // Uncomment wrapRootElement in that file, and the next line to test this approach.
+
+    <AppBreaker text="hello world" />
+
+    // APPROACH 2 - custom error boundaries around each section
+    // Uncomment the next block to test this approach.
+
+    // <CustomErrorBoundary>
+    //   <AppBreaker text="hello world" />
+    // </CustomErrorBoundary>
+
+    // APPROACH 3 - open-source error boundaries around each section
+    // Uncomment the next block to test this approach.
+
+    // <ErrorBoundary
+    //   FallbackComponent={ErrorFallback}
+    //   onError={() => console.warn('Page-level error boundary')}
+    // >
+    //   <AppBreaker text="hello world" />
+    // </ErrorBoundary>
   );
 }
